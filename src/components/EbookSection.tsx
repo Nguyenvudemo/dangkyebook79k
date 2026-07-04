@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { BookOpen, CheckCircle, Download, FileText, ArrowRight, Gift, Bookmark, Award, Users, Settings, HelpCircle, AlertCircle, RefreshCw, Phone, Home } from 'lucide-react';
 import { Lead } from '../types';
+import { GOOGLE_SHEET_WEBHOOK_URL } from '../config';
 
 interface EbookSectionProps {
   onRegister: (lead: Lead) => void;
@@ -138,8 +139,10 @@ export default function EbookSection({ onRegister, registeredLead }: EbookSectio
         localLeads.push(leadData);
         localStorage.setItem('registered_leads', JSON.stringify(localLeads));
 
-        // Sync directly to Google Sheet Webhook if defined as a public Vite env or in localStorage
-        const clientWebhook = (import.meta as any).env.VITE_GOOGLE_SHEET_WEBHOOK_URL || localStorage.getItem('google_sheet_webhook_url');
+        // Sync directly to Google Sheet Webhook if defined in config.ts, public Vite env, or localStorage
+        const clientWebhook = GOOGLE_SHEET_WEBHOOK_URL && GOOGLE_SHEET_WEBHOOK_URL !== "ĐƯỜNG_DẪN_WEB_APP_URL_CỦA_BẠN"
+          ? GOOGLE_SHEET_WEBHOOK_URL
+          : ((import.meta as any).env.VITE_GOOGLE_SHEET_WEBHOOK_URL || localStorage.getItem('google_sheet_webhook_url'));
         if (clientWebhook && clientWebhook.startsWith("http")) {
           try {
             // Send payload directly to the Apps Script Webhook
