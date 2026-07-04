@@ -11,7 +11,7 @@ app.use(express.json());
 // CÁCH CẤU HÌNH DÁN TRỰC TIẾP LINK GOOGLE SHEET:
 // Hãy thay thế dòng dưới đây bằng đường dẫn Web App URL từ Google Apps Script của bạn.
 // Hoặc bạn có thể thiết lập biến môi trường GOOGLE_SHEET_WEBHOOK_URL trong file .env
-const GOOGLE_SHEET_WEBHOOK_URL = process.env.GOOGLE_SHEET_WEBHOOK_URL || "https://script.google.com/macros/s/AKfycbxhnDu61pkJridTyBl8DYMWpR6SNTK2pDY_KY8AZPkMST5xG2yixsdKNZQ4gvyRxVKX/exec";
+const GOOGLE_SHEET_WEBHOOK_URL = process.env.GOOGLE_SHEET_WEBHOOK_URL || "https://script.google.com/macros/s/AKfycby3LT-iv8ozrhTPlfDnlKhMPu2ztcf39loJaVKfsoeUakT2s0TiOSCIZV3DqkSx6hSM/exec";
 
 // Memory store for registered leads (simple server list)
 const leadsList: any[] = [];
