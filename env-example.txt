@@ -1,11 +1,1 @@
-# FILE CẤU HÌNH ENVIRONMENT CHO ĐƯỜNG DẪN GOOGLE SHEET
-# Bạn có thể copy nội dung này vào file .env trên máy của bạn hoặc cấu hình trực tiếp trên hosting.
 
-# Khi deploy full-stack (có máy chủ Node.js):
-GOOGLE_SHEET_WEBHOOK_URL="ĐÁN_URL_APPS_SCRIPT_CỦA_BẠN_VÀO_ĐÂY"
-
-# Khi deploy trang tĩnh (Ví dụ: GitHub Pages - Khuyến nghị dùng cái này):
-VITE_GOOGLE_SHEET_WEBHOOK_URL="https://script.google.com/macros/s/AKfycbyRMY6ULBFXfJ8eNLaWYHTs3DjW7C2d4g0SojJcHrGTX_YvO9JsIdk9r938_McOivom/exec"
-
-APP_URL="URL_CỦA_TRANG_WEB_NẾU_CẦN"
-GEMINI_API_KEY="MÃ_API_GEMINI_NẾU_CÓ"
