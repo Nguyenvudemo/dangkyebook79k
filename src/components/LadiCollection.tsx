@@ -13,7 +13,7 @@ const DEFAULT_COLLECTION: LadiItem[] = [
     id: 'ladi-1',
     title: 'Landing Page Mỹ Phẩm Vegan',
     category: 'Mỹ Phẩm & Làm Đẹp',
-    imageUrl: 'https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?w=800&auto=format&fit=crop&q=80'
+    imageUrl: 'dac san.png?w=800&auto=format&fit=crop&q=80'
   },
   {
     id: 'ladi-2',
