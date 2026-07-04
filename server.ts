@@ -2,6 +2,8 @@ import express from "express";
 import path from "path";
 import { createServer as createViteServer } from "vite";
 
+import { GOOGLE_SHEET_WEBHOOK_URL as configWebhookUrl } from "./src/config";
+
 const app = express();
 const PORT = 3000;
 
@@ -9,9 +11,8 @@ app.use(express.json());
 
 // Google Sheet Webhook Configuration:
 // CÁCH CẤU HÌNH DÁN TRỰC TIẾP LINK GOOGLE SHEET:
-// Hãy thay thế dòng dưới đây bằng đường dẫn Web App URL từ Google Apps Script của bạn.
-// Hoặc bạn có thể thiết lập biến môi trường GOOGLE_SHEET_WEBHOOK_URL trong file .env
-const GOOGLE_SHEET_WEBHOOK_URL = process.env.GOOGLE_SHEET_WEBHOOK_URL || "https://script.google.com/macros/s/AKfycbyRMY6ULBFXfJ8eNLaWYHTs3DjW7C2d4g0SojJcHrGTX_YvO9JsIdk9r938_McOivom/exec";
+// Hãy thay thế đường dẫn Web App URL từ Google Apps Script của bạn trong file: src/config.ts
+const GOOGLE_SHEET_WEBHOOK_URL = process.env.GOOGLE_SHEET_WEBHOOK_URL || configWebhookUrl;
 
 // Memory store for registered leads (simple server list)
 const leadsList: any[] = [];
