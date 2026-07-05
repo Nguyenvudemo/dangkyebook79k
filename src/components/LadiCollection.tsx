@@ -1,81 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import { Maximize2, X, Settings, Image as ImageIcon, Check, RotateCcw, ExternalLink } from 'lucide-react';
-
-interface LadiItem {
-  id: string;
-  title: string;
-  category: string;
-  imageUrl: string;
-}
-
-const DEFAULT_COLLECTION: LadiItem[] = [
-  {
-    id: 'ladi-1',
-    title: 'Landing Page Mỹ Phẩm Vegan',
-    category: 'Mỹ Phẩm & Làm Đẹp',
-    imageUrl: 'dac san.png?w=800&auto=format&fit=crop&q=80'
-  },
-  {
-    id: 'ladi-2',
-    title: 'Landing Page Cà Phê Specialty',
-    category: 'F&B - Trà sữa & Cà phê',
-    imageUrl: 'https://images.unsplash.com/photo-1507133750040-4a8f57021571?w=800&auto=format&fit=crop&q=80'
-  },
-  {
-    id: 'ladi-3',
-    title: 'Landing Page Thiết Bị Công Nghệ',
-    category: 'SaaS & Tech Gadget',
-    imageUrl: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&auto=format&fit=crop&q=80'
-  },
-  {
-    id: 'ladi-4',
-    title: 'Landing Page Thời Trang Minimalist',
-    category: 'Thời Trang Cao Cấp',
-    imageUrl: 'https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&auto=format&fit=crop&q=80'
-  },
-  {
-    id: 'ladi-5',
-    title: 'Landing Page Khóa Học Tiếng Anh',
-    category: 'Giáo Dục & EdTech',
-    imageUrl: 'https://images.unsplash.com/photo-1517842645767-c639042777db?w=800&auto=format&fit=crop&q=80'
-  },
-  {
-    id: 'ladi-6',
-    title: 'Landing Page Thiết Kế Nội Thất',
-    category: 'Kiến Trúc & Đồ Gia Dụng',
-    imageUrl: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=800&auto=format&fit=crop&q=80'
-  },
-  {
-    id: 'ladi-7',
-    title: 'Landing Page Gym & Thể Hình',
-    category: 'Sức Khỏe & Fitness',
-    imageUrl: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=800&auto=format&fit=crop&q=80'
-  },
-  {
-    id: 'ladi-8',
-    title: 'Landing Page Khách Sạn & Resort',
-    category: 'Du Lịch & Nghỉ Dưỡng',
-    imageUrl: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800&auto=format&fit=crop&q=80'
-  },
-  {
-    id: 'ladi-9',
-    title: 'Landing Page Spa & Chăm Sóc Da',
-    category: 'Dịch Vụ Trị Liệu',
-    imageUrl: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800&auto=format&fit=crop&q=80'
-  }
-];
+import { LadiItem, DEFAULT_LADI_COLLECTION } from '../config';
 
 export default function LadiCollection() {
   const [items, setItems] = useState<LadiItem[]>(() => {
     const saved = localStorage.getItem('ladi_collection_items');
     if (saved) {
       try {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        // Map configured image values from config.ts if they changed or keep saved ones
+        return DEFAULT_LADI_COLLECTION.map(defaultItem => {
+          const savedItem = parsed.find((item: any) => item.id === defaultItem.id);
+          if (savedItem) {
+            // Overwrite old Unsplash URLs with new local paths if default config updated
+            const isOldUnsplash = savedItem.imageUrl && savedItem.imageUrl.includes('images.unsplash.com');
+            const hasNewLocalPath = defaultItem.imageUrl && defaultItem.imageUrl.startsWith('/images/');
+            const imageUrl = (isOldUnsplash && hasNewLocalPath) ? defaultItem.imageUrl : (savedItem.imageUrl || defaultItem.imageUrl);
+            return {
+              ...savedItem,
+              title: defaultItem.title,
+              category: defaultItem.category,
+              imageUrl: imageUrl
+            };
+          }
+          return defaultItem;
+        });
       } catch (e) {
         console.error(e);
       }
     }
-    return DEFAULT_COLLECTION;
+    return DEFAULT_LADI_COLLECTION;
   });
 
   const [isAdminOpen, setIsAdminOpen] = useState(false);
@@ -96,7 +50,7 @@ export default function LadiCollection() {
 
   const handleResetDefaults = () => {
     if (window.confirm('Bạn có muốn đặt lại bộ sưu tập ảnh về mặc định không?')) {
-      setItems(DEFAULT_COLLECTION);
+      setItems(DEFAULT_LADI_COLLECTION);
       setSavedSuccess(true);
       setTimeout(() => setSavedSuccess(false), 2000);
     }
