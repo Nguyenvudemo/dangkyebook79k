@@ -13,6 +13,7 @@ const resolveImageUrl = (url: string) => {
     cleanUrl = cleanUrl.replace('/public/images/', '/images/');
   }
 
+  // Handle full URLs starting with http://, https:// or data URIs
   if (cleanUrl.startsWith('http://') || cleanUrl.startsWith('https://') || cleanUrl.startsWith('data:')) {
     return cleanUrl;
   }
@@ -36,9 +37,20 @@ const resolveImageUrl = (url: string) => {
     cleanUrl = cleanUrl.substring(1);
   }
   
-  // @ts-ignore
-  const base = import.meta.env.BASE_URL || '/';
-  const cleanBase = base.endsWith('/') ? base : `${base}/`;
+  // Try to read base URL dynamically, fallback to empty string for full relativity
+  let base = '';
+  try {
+    // @ts-ignore
+    base = import.meta.env.BASE_URL || '';
+  } catch (e) {}
+
+  // If base is root '/' or './', we can safely use purely relative paths (empty base)
+  // which works flawlessly across both Vercel (domain root) and GitHub Pages subfolders.
+  if (base === '/' || base === './') {
+    base = '';
+  }
+
+  const cleanBase = base ? (base.endsWith('/') ? base : `${base}/`) : '';
   return `${cleanBase}${cleanUrl}`;
 };
 
