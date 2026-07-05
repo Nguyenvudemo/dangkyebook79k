@@ -47,7 +47,7 @@ export const DEFAULT_LADI_COLLECTION: LadiItem[] = [
     id: 'ladi-3',
     title: 'Landing Page Thiết Bị Công Nghệ',
     category: 'SaaS & Tech Gadget',
-    imageUrl: 'images/dac_san_binh_dinh.png'
+    imageUrl: 'images/dac_san_binh_dinh.jpg'
   },
   {
     id: 'ladi-4',
