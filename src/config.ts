@@ -35,13 +35,13 @@ export const DEFAULT_LADI_COLLECTION: LadiItem[] = [
     id: 'ladi-1',
     title: 'Landing Page Mỹ Phẩm Vegan',
     category: 'Mỹ Phẩm & Làm Đẹp',
-    imageUrl: '/images/dacsan.png'
+    imageUrl: 'images/dacsan.png'
   },
   {
     id: 'ladi-2',
     title: 'Landing Page Cà Phê Specialty',
     category: 'F&B - Trà sữa & Cà phê',
-    imageUrl: '/images/greenmotion_ev.jpg'
+    imageUrl: 'images/greenmotion_ev.jpg'
   },
   {
     id: 'ladi-3',
