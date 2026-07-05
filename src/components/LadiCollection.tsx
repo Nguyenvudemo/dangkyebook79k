@@ -9,12 +9,25 @@ const resolveImageUrl = (url: string) => {
     return url;
   }
   
-  let cleanUrl = url;
+  let cleanUrl = url.trim();
+  
+  // Strip relative prefixes first: ./ or /
+  if (cleanUrl.startsWith('./')) {
+    cleanUrl = cleanUrl.substring(2);
+  }
   if (cleanUrl.startsWith('/')) {
     cleanUrl = cleanUrl.substring(1);
   }
-  if (cleanUrl.startsWith('./')) {
-    cleanUrl = cleanUrl.substring(2);
+  
+  // If the path mistakenly contains "public/" at the start, strip it
+  // e.g., "public/images/dacsan.png" -> "images/dacsan.png"
+  if (cleanUrl.startsWith('public/')) {
+    cleanUrl = cleanUrl.substring(7);
+  }
+  
+  // Strip potential secondary leading slashes if they exist after stripping "public"
+  if (cleanUrl.startsWith('/')) {
+    cleanUrl = cleanUrl.substring(1);
   }
   
   // @ts-ignore
