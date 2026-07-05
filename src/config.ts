@@ -41,7 +41,7 @@ export const DEFAULT_LADI_COLLECTION: LadiItem[] = [
     id: 'ladi-2',
     title: 'Landing Page Cà Phê Specialty',
     category: 'F&B - Trà sữa & Cà phê',
-    imageUrl: 'images/greenmotion_ev.jpg'
+    imageUrl: 'public/images/greenmotion_ev.jpg'
   },
   {
     id: 'ladi-3',
