@@ -5,11 +5,17 @@ import { LadiItem, DEFAULT_LADI_COLLECTION } from '../config';
 // Helper to resolve image URLs dynamically supporting Vercel and GitHub Pages subdirectories
 const resolveImageUrl = (url: string) => {
   if (!url) return '';
-  if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
-    return url;
-  }
   
   let cleanUrl = url.trim();
+
+  // Handle cases where /public/ is mistakenly included in full URLs or paths
+  if (cleanUrl.includes('/public/images/')) {
+    cleanUrl = cleanUrl.replace('/public/images/', '/images/');
+  }
+
+  if (cleanUrl.startsWith('http://') || cleanUrl.startsWith('https://') || cleanUrl.startsWith('data:')) {
+    return cleanUrl;
+  }
   
   // Strip relative prefixes first: ./ or /
   if (cleanUrl.startsWith('./')) {
@@ -194,7 +200,7 @@ export default function LadiCollection() {
                       placeholder="https://images.unsplash.com/..."
                     />
                     <a
-                      href={item.imageUrl}
+                      href={resolveImageUrl(item.imageUrl)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="p-1 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-slate-400 hover:text-white flex items-center justify-center shrink-0"
@@ -203,6 +209,9 @@ export default function LadiCollection() {
                       <ExternalLink className="w-3 h-3" />
                     </a>
                   </div>
+                  <p className="text-[8px] text-slate-500">
+                    * Chấp nhận link online hoặc đường dẫn ảnh dạng: <code className="text-indigo-400 font-mono">images/ten_anh.jpg</code> (không cần thêm <code className="text-rose-400 font-mono">public/</code>)
+                  </p>
                 </div>
               </div>
             ))}
