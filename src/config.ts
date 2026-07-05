@@ -35,13 +35,13 @@ export const DEFAULT_LADI_COLLECTION: LadiItem[] = [
     id: 'ladi-1',
     title: 'Landing Page Mỹ Phẩm Vegan',
     category: 'Mỹ Phẩm & Làm Đẹp',
-    imageUrl: 'https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?w=800&auto=format&fit=crop&q=80'
+    imageUrl: '/images/dacsan.png'
   },
   {
     id: 'ladi-2',
     title: 'Landing Page Cà Phê Specialty',
     category: 'F&B - Trà sữa & Cà phê',
-    imageUrl: 'https://images.unsplash.com/photo-1507133750040-4a8f57021571?w=800&auto=format&fit=crop&q=80'
+    imageUrl: '/images/greenmotion_ev.jpg'
   },
   {
     id: 'ladi-3',
@@ -86,4 +86,3 @@ export const DEFAULT_LADI_COLLECTION: LadiItem[] = [
     imageUrl: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800&auto=format&fit=crop&q=80'
   }
 ];
-
