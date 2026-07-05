@@ -2,6 +2,26 @@ import React, { useState, useEffect } from 'react';
 import { Maximize2, X, Settings, Image as ImageIcon, Check, RotateCcw, ExternalLink } from 'lucide-react';
 import { LadiItem, DEFAULT_LADI_COLLECTION } from '../config';
 
+// Helper to resolve image URLs dynamically supporting Vercel and GitHub Pages subdirectories
+const resolveImageUrl = (url: string) => {
+  if (!url) return '';
+  if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('data:')) {
+    return url;
+  }
+  
+  let cleanUrl = url;
+  if (cleanUrl.startsWith('/')) {
+    cleanUrl = cleanUrl.substring(1);
+  }
+  if (cleanUrl.startsWith('./')) {
+    cleanUrl = cleanUrl.substring(2);
+  }
+  
+  const base = (import.meta as any).env?.BASE_URL || '/';
+  const cleanBase = base.endsWith('/') ? base : `${base}/`;
+  return `${cleanBase}${cleanUrl}`;
+};
+
 export default function LadiCollection() {
   const [items, setItems] = useState<LadiItem[]>(() => {
     const saved = localStorage.getItem('ladi_collection_items');
@@ -20,12 +40,7 @@ export default function LadiCollection() {
               defaultItem.imageUrl.startsWith('./images/')
             );
             
-            let imageUrl = (isOldUnsplash && hasNewLocalPath) ? defaultItem.imageUrl : (savedItem.imageUrl || defaultItem.imageUrl);
-            
-            // Auto-convert leading slash for local image paths to support GitHub Pages out-of-the-box
-            if (imageUrl && imageUrl.startsWith('/images/')) {
-              imageUrl = imageUrl.substring(1); // Strip leading '/' so it becomes 'images/...'
-            }
+            const imageUrl = (isOldUnsplash && hasNewLocalPath) ? defaultItem.imageUrl : (savedItem.imageUrl || defaultItem.imageUrl);
 
             return {
               ...savedItem,
@@ -34,25 +49,13 @@ export default function LadiCollection() {
               imageUrl: imageUrl
             };
           }
-          
-          let defaultImg = defaultItem.imageUrl;
-          if (defaultImg && defaultImg.startsWith('/images/')) {
-            defaultImg = defaultImg.substring(1);
-          }
-          return { ...defaultItem, imageUrl: defaultImg };
+          return defaultItem;
         });
       } catch (e) {
         console.error(e);
       }
     }
-    
-    return DEFAULT_LADI_COLLECTION.map(item => {
-      let img = item.imageUrl;
-      if (img && img.startsWith('/images/')) {
-        img = img.substring(1);
-      }
-      return { ...item, imageUrl: img };
-    });
+    return DEFAULT_LADI_COLLECTION;
   });
 
   const [isAdminOpen, setIsAdminOpen] = useState(false);
@@ -211,7 +214,7 @@ export default function LadiCollection() {
             {/* Main Image */}
             <div className="w-full h-full relative overflow-hidden">
               <img
-                src={item.imageUrl}
+                src={resolveImageUrl(item.imageUrl)}
                 alt={item.title}
                 referrerPolicy="no-referrer"
                 className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
@@ -266,7 +269,7 @@ export default function LadiCollection() {
             {/* The zoomed image framed beautifully */}
             <div className="relative rounded-2xl overflow-hidden border border-white/15 bg-slate-900 shadow-2xl shadow-indigo-500/10 max-h-[80vh] aspect-[9/16]">
               <img
-                src={zoomItem.imageUrl}
+                src={resolveImageUrl(zoomItem.imageUrl)}
                 alt={zoomItem.title}
                 referrerPolicy="no-referrer"
                 className="h-full w-auto object-contain"
