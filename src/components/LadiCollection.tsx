@@ -8,8 +8,11 @@ const resolveImageUrl = (url: string) => {
   
   let cleanUrl = url.trim();
 
-  // Handle cases where /public/ is mistakenly included in full URLs or paths
-  if (cleanUrl.includes('/public/images/')) {
+  // If the path mistakenly contains "public/" at the start, strip it
+  // e.g., "public/images/dacsan.png" -> "images/dacsan.png"
+  if (cleanUrl.startsWith('public/')) {
+    cleanUrl = cleanUrl.substring(7);
+  } else if (cleanUrl.includes('/public/images/')) {
     cleanUrl = cleanUrl.replace('/public/images/', '/images/');
   }
 
@@ -26,31 +29,23 @@ const resolveImageUrl = (url: string) => {
     cleanUrl = cleanUrl.substring(1);
   }
   
-  // If the path mistakenly contains "public/" at the start, strip it
-  // e.g., "public/images/dacsan.png" -> "images/dacsan.png"
-  if (cleanUrl.startsWith('public/')) {
-    cleanUrl = cleanUrl.substring(7);
-  }
-  
   // Strip potential secondary leading slashes if they exist after stripping "public"
   if (cleanUrl.startsWith('/')) {
     cleanUrl = cleanUrl.substring(1);
   }
   
-  // Try to read base URL dynamically, fallback to empty string for full relativity
-  let base = '';
+  // Try to read base URL dynamically, fallback to '/'
+  let base = '/';
   try {
     // @ts-ignore
-    base = import.meta.env.BASE_URL || '';
+    base = import.meta.env.BASE_URL || '/';
   } catch (e) {}
 
-  // If base is root '/' or './', we can safely use purely relative paths (empty base)
-  // which works flawlessly across both Vercel (domain root) and GitHub Pages subfolders.
-  if (base === '/' || base === './') {
+  if (base === './' || base === '.') {
     base = '';
   }
-
-  const cleanBase = base ? (base.endsWith('/') ? base : `${base}/`) : '';
+  
+  const cleanBase = base ? (base.endsWith('/') ? base : `${base}/`) : '/';
   return `${cleanBase}${cleanUrl}`;
 };
 
