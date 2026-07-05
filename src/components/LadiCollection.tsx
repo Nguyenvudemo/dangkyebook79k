@@ -14,8 +14,19 @@ export default function LadiCollection() {
           if (savedItem) {
             // Overwrite old Unsplash URLs with new local paths if default config updated
             const isOldUnsplash = savedItem.imageUrl && savedItem.imageUrl.includes('images.unsplash.com');
-            const hasNewLocalPath = defaultItem.imageUrl && defaultItem.imageUrl.startsWith('/images/');
-            const imageUrl = (isOldUnsplash && hasNewLocalPath) ? defaultItem.imageUrl : (savedItem.imageUrl || defaultItem.imageUrl);
+            const hasNewLocalPath = defaultItem.imageUrl && (
+              defaultItem.imageUrl.startsWith('/images/') ||
+              defaultItem.imageUrl.startsWith('images/') ||
+              defaultItem.imageUrl.startsWith('./images/')
+            );
+            
+            let imageUrl = (isOldUnsplash && hasNewLocalPath) ? defaultItem.imageUrl : (savedItem.imageUrl || defaultItem.imageUrl);
+            
+            // Auto-convert leading slash for local image paths to support GitHub Pages out-of-the-box
+            if (imageUrl && imageUrl.startsWith('/images/')) {
+              imageUrl = imageUrl.substring(1); // Strip leading '/' so it becomes 'images/...'
+            }
+
             return {
               ...savedItem,
               title: defaultItem.title,
@@ -23,13 +34,25 @@ export default function LadiCollection() {
               imageUrl: imageUrl
             };
           }
-          return defaultItem;
+          
+          let defaultImg = defaultItem.imageUrl;
+          if (defaultImg && defaultImg.startsWith('/images/')) {
+            defaultImg = defaultImg.substring(1);
+          }
+          return { ...defaultItem, imageUrl: defaultImg };
         });
       } catch (e) {
         console.error(e);
       }
     }
-    return DEFAULT_LADI_COLLECTION;
+    
+    return DEFAULT_LADI_COLLECTION.map(item => {
+      let img = item.imageUrl;
+      if (img && img.startsWith('/images/')) {
+        img = img.substring(1);
+      }
+      return { ...item, imageUrl: img };
+    });
   });
 
   const [isAdminOpen, setIsAdminOpen] = useState(false);
