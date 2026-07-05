@@ -17,7 +17,8 @@ const resolveImageUrl = (url: string) => {
     cleanUrl = cleanUrl.substring(2);
   }
   
-  const base = (import.meta as any).env?.BASE_URL || '/';
+  // @ts-ignore
+  const base = import.meta.env.BASE_URL || '/';
   const cleanBase = base.endsWith('/') ? base : `${base}/`;
   return `${cleanBase}${cleanUrl}`;
 };
